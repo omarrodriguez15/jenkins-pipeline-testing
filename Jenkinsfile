@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 node {
-  def nugetServer = 'j:/jenkins'
+  def buildArtifact = "build-artifact-${env.BUILD_NUMBER}.zip"
 
   stage('compile') {
     checkout scm
@@ -13,13 +13,15 @@ node {
     checkout scm
     dir('test-lib') {
       bat 'dotnet pack test-lib.csproj'
+      zip zipFile: buildArtifact, dir: "bin/Debug/"
+      archiveArtifacts artifacts: buildArtifact, fingerprint: true
       cifsPublisher: 
          cifsPublisher(publishers: [
             [
                configName: 'local-drops', 
                transfers: [
                   [
-                     sourceFiles: 'bin/Debug/test-lib.1.0.0.nupkg'
+                     sourceFiles: buildArtifact
                   ]
                ], 
                verbose: true
