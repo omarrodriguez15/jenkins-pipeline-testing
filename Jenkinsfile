@@ -12,7 +12,7 @@ node {
     checkout scm
     dir('test-lib') {
       bat 'dotnet pack test-lib.csproj'
-      bat "dotnet nuget push bin/Debug/test-lib.1.0.0.nupkg -s z:/jenkins"
+      bat "dotnet nuget push bin/Debug/test-lib.1.0.0.nupkg -s /z:/jenkins"
     }
   }
 }
